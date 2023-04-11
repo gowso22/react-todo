@@ -7,7 +7,6 @@ import { atom, selector } from "recoil";
 // 기존 state를 이용만할 뿐 변형시키지 않는다. 
 // derived state는 다른 데이터에 의존하는 동적인 데이터를 만들 수 있기 때문에 강력한 개념이다.
 
-
 export enum Categories {
     "TO_DO" = "TO_DO",
   "DOING" = "DOING",
@@ -30,8 +29,7 @@ export const categoryState = atom<Categories>({
 
 export const toDoState = atom<IToDo[]>({
     key : "toDo",
-    default : [],
- 
+    default : JSON.parse(localStorage.getItem("toDos") ?? "[]"),
 });
 
 // atom을 가져다가 output을 변형(atom을 받아서 atom을 변형)

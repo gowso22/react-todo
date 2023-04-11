@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue} from "recoil";
 import styled from "styled-components";
 import { categoryState, toDoState } from "./atoms";
+import {useEffect} from 'react';
 
 
 const Form = styled.form`
@@ -20,7 +21,7 @@ interface IForm{
 
 function CreateToDo(){
   
-    const setToDos = useSetRecoilState(toDoState);
+    const [toDos, setToDos] = useRecoilState(toDoState)
     const category = useRecoilValue(categoryState)
     const {register, handleSubmit, setValue, formState : {errors}} = useForm<IForm>();
     const handleValid = ({ toDo }: IForm) =>{
@@ -34,12 +35,18 @@ function CreateToDo(){
 
         setValue("toDo", "")
     }
+
+    useEffect(() =>{
+        localStorage.setItem("toDos", JSON.stringify(toDos));
+    },[toDos])    
+
+
     return (
         <Form onSubmit={handleSubmit(handleValid)}>
                 <input {...register("toDo", 
                     {required : `${category}란은 필수입력사항입니다.`})
                 }
-                placeholder = {category} />
+                placeholder = {`${category}을 입력해주세요`} />
                 <ErrorText>{errors.toDo?.message}</ErrorText>
                 <button>{category} 추가</button>
         </Form>
